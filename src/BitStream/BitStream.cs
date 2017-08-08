@@ -46,8 +46,8 @@ namespace BitStreams
 		/// <param name="MSB">true if Most Significant Bit will be used, if false LSB will be used</param>
 		public BitStream(Stream stream, bool MSB = false)
 		{
-			this._stream = new MemoryStream();
-			stream.CopyTo(this._stream);
+			_stream = new MemoryStream();
+			stream.CopyTo(_stream);
 			this.MSB = MSB;
 			Offset = 0;
 			Bit = 0;
@@ -63,12 +63,12 @@ namespace BitStreams
 		/// <param name="MSB">true if Most Significant Bit will be used, if false LSB will be used</param>
 		public BitStream(Stream stream, Encoding encoding, bool MSB = false)
 		{
-			this._stream = new MemoryStream();
-			stream.CopyTo(this._stream);
+			_stream = new MemoryStream();
+			stream.CopyTo(_stream);
 			this.MSB = MSB;
 			Offset = 0;
 			Bit = 0;
-			this._encoding = encoding;
+			_encoding = encoding;
 			AutoIncreaseStream = false;
 		}
 
@@ -103,7 +103,7 @@ namespace BitStreams
 			this.MSB = MSB;
 			Offset = 0;
 			Bit = 0;
-			this._encoding = encoding;
+			_encoding = encoding;
 			AutoIncreaseStream = false;
 		}
 
@@ -178,24 +178,24 @@ namespace BitStreams
 		{
 			if (offset > Length)
 			{
-				this.Offset = Length;
+				Offset = Length;
 			}
 			else
 			{
 				if (offset >= 0)
-					this.Offset = offset;
+					Offset = offset;
 				else
 					offset = 0;
 			}
 			if (bit >= 8)
 			{
 				var n = bit / 8;
-				this.Offset += n;
-				this.Bit = bit % 8;
+				Offset += n;
+				Bit = bit % 8;
 			}
 			else
 			{
-				this.Bit = bit;
+				Bit = bit;
 			}
 			_stream.Seek(offset, SeekOrigin.Begin);
 		}
@@ -259,7 +259,7 @@ namespace BitStreams
 		/// <param name="encoding"><see cref="Encoding" /> to use</param>
 		public void SetEncoding(Encoding encoding)
 		{
-			this._encoding = encoding;
+			_encoding = encoding;
 		}
 
 		/// <summary>
@@ -292,7 +292,7 @@ namespace BitStreams
 			var m = new MemoryStream(buffer);
 			_stream = new MemoryStream();
 			m.CopyTo(_stream);
-			this.Offset = 0;
+			Offset = 0;
 			Bit = 0;
 		}
 
@@ -303,8 +303,8 @@ namespace BitStreams
 		public void CopyStreamTo(Stream stream)
 		{
 			Seek(0, 0);
-			stream.SetLength(this._stream.Length);
-			this._stream.CopyTo(stream);
+			stream.SetLength(_stream.Length);
+			_stream.CopyTo(stream);
 		}
 
 		/// <summary>
@@ -314,8 +314,8 @@ namespace BitStreams
 		public void CopyStreamTo(BitStream stream)
 		{
 			Seek(0, 0);
-			stream.ChangeLength(this._stream.Length);
-			this._stream.CopyTo(stream._stream);
+			stream.ChangeLength(_stream.Length);
+			_stream.CopyTo(stream._stream);
 			stream.Seek(0, 0);
 		}
 
