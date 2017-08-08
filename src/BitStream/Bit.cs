@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 
 
 namespace BitStreams
 {
+	[DebuggerDisplay("Bit {_value}")]
 	[Serializable]
 	public struct Bit
 	{
@@ -64,6 +66,32 @@ namespace BitStreams
 			return bit._value.ToString();
 		}
 
+		public static implicit operator Bit(string bit)
+		{
+			if (bit == "0") return new Bit(0);
+			if (bit == "1") return new Bit(1);
+
+			throw new ArgumentOutOfRangeException(nameof(bit), bit, "The string representation must be exactly \"0\" or \"1\".");
+		}
+
+		public static implicit operator char(Bit bit)
+		{
+			return bit._value == 0 ? '0' : '1';
+		}
+
+		public static implicit operator Bit(char bit)
+		{
+			if (bit == '0') return new Bit(0);
+			if (bit == '1') return new Bit(1);
+
+			throw new ArgumentOutOfRangeException(nameof(bit), bit, "The char representation must be exactly '0' or '1'.");
+		}
+
+		public override string ToString()
+		{
+			return _value.ToString();
+		}
+
 		public int AsInt()
 		{
 			return _value;
@@ -73,5 +101,13 @@ namespace BitStreams
 		{
 			return _value == 1;
 		}
+
+		public char AsChar()
+		{
+			return _value == 0 ? '0' : '1';
+		}
+
+		public static Bit Zero = new Bit(0);
+		public static Bit One = new Bit(1);
 	}
 }
