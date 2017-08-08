@@ -37,6 +37,7 @@
     <Compile Include="Bit.cs" />
     <Compile Include="BitExtensions.cs" />
     <Compile Include="BitStream.cs" />
+    <Compile Include="BitStreamExtensions.cs" />
     <Compile Include="Int24.cs" />
     <Compile Include="Int48.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

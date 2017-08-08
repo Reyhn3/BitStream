@@ -39,6 +39,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitStreamExtensionsTests.cs" />
+    <Compile Include="BitStreamTests.cs" />
     <Compile Include="BitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

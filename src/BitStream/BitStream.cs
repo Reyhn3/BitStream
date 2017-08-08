@@ -18,7 +18,14 @@ namespace BitStreams
 
 		private long Offset { get; set; }
 		private int Bit { get; set; }
-		private bool MSB { get; }
+
+		public bool _msb;
+
+		/// <summary>
+		///     Gets a value indicating whether the <b>most</b> significant bit is first (<c>true</c>),
+		///     or if the <b>least</b> significant bit is first (<c>false</c>).
+		/// </summary>
+		public bool IsMostSignificantBitFirst => _msb;
 
 		/// <summary>
 		///     Allows the <see cref="BitStream" /> auto increase in size when needed
@@ -29,6 +36,11 @@ namespace BitStreams
 		///     Get the stream length
 		/// </summary>
 		public long Length => _stream.Length;
+
+		/// <summary>
+		///     Gets the position within the current stream.
+		/// </summary>
+		public long Position => _stream.Position;
 
 		/// <summary>
 		///     Get the current bit position in the stream
@@ -50,7 +62,7 @@ namespace BitStreams
 		{
 			_stream = new MemoryStream();
 			stream.CopyTo(_stream);
-			this.MSB = MSB;
+			_msb = MSB;
 			Offset = 0;
 			Bit = 0;
 			_encoding = Encoding.UTF8;
@@ -67,7 +79,7 @@ namespace BitStreams
 		{
 			_stream = new MemoryStream();
 			stream.CopyTo(_stream);
-			this.MSB = MSB;
+			_msb = MSB;
 			Offset = 0;
 			Bit = 0;
 			_encoding = encoding;
@@ -84,7 +96,7 @@ namespace BitStreams
 			_stream = new MemoryStream();
 			var m = new MemoryStream(buffer);
 			m.CopyTo(_stream);
-			this.MSB = MSB;
+			_msb = MSB;
 			Offset = 0;
 			Bit = 0;
 			_encoding = Encoding.UTF8;
@@ -102,7 +114,7 @@ namespace BitStreams
 			_stream = new MemoryStream();
 			var m = new MemoryStream(buffer);
 			m.CopyTo(_stream);
-			this.MSB = MSB;
+			_msb = MSB;
 			Offset = 0;
 			Bit = 0;
 			_encoding = encoding;
@@ -381,7 +393,7 @@ namespace BitStreams
 				throw new IOException("Cannot read in an offset bigger than the length of the stream");
 			_stream.Seek(Offset, SeekOrigin.Begin);
 			byte value;
-			if (!MSB)
+			if (!_msb)
 				value = (byte)((_stream.ReadByte() >> Bit) & 1);
 			else
 				value = (byte)((_stream.ReadByte() >> (7 - Bit)) & 1);
@@ -412,7 +424,7 @@ namespace BitStreams
 			_stream.Seek(Offset, SeekOrigin.Begin);
 			var value = (byte)_stream.ReadByte();
 			_stream.Seek(Offset, SeekOrigin.Begin);
-			if (!MSB)
+			if (!_msb)
 			{
 				value &= (byte)~(1 << Bit);
 				value |= (byte)(data << Bit);
@@ -493,7 +505,7 @@ namespace BitStreams
 				byte value = 0;
 				for (var p = 0; p < 8 && i < length; i++, p++)
 				{
-					if (!MSB)
+					if (!_msb)
 						value |= (byte)(ReadBit() << p);
 					else
 						value |= (byte)(ReadBit() << (7 - p));
@@ -685,7 +697,7 @@ namespace BitStreams
 				byte value = 0;
 				for (var p = 0; p < 8 && i < length; i++, p++)
 				{
-					if (!MSB)
+					if (!_msb)
 						value = (byte)((data[position] >> p) & 1);
 					else
 						value = (byte)((data[position] >> (7 - p)) & 1);
