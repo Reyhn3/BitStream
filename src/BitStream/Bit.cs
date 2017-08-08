@@ -10,6 +10,7 @@ namespace BitStreams
 
 		private Bit(int value)
 		{
+//TODO: Is this really the expected operation? Shouldn't value > 0 be 1?
 			_value = (byte)(value & 1);
 		}
 
