@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
+// ReSharper disable InconsistentNaming
+
 
 namespace BitStreams
 {
@@ -122,8 +124,9 @@ namespace BitStreams
 		/// </summary>
 		/// <param name="buffer">byte[] to use</param>
 		/// <param name="encoding">
-		///     Encoding to use with chars/param>
-		///     <param name="MSB">true if Most Significant Bit will be used, if false LSB will be used</param>
+		///     Encoding to use with chars
+		/// </param>
+		/// <param name="MSB">true if Most Significant Bit will be used, if false LSB will be used</param>
 		public static BitStream Create(byte[] buffer, Encoding encoding, bool MSB = false)
 		{
 			return new BitStream(buffer, encoding, MSB);
@@ -869,7 +872,7 @@ namespace BitStreams
 		/// </summary>
 		/// <param name="bits">bits to shift</param>
 		/// <param name="leftShift">true to left shift, false to right shift</param>
-		public void bitwiseShiftOnBit(int bits, bool leftShift)
+		public void BitwiseShiftOnBit(int bits, bool leftShift)
 		{
 			if (!ValidPositionWhen(8))
 				throw new IOException("Cannot read in an offset bigger than the length of the stream");
@@ -893,7 +896,7 @@ namespace BitStreams
 		/// </summary>
 		/// <param name="bits">bits to shift</param>
 		/// <param name="leftShift">true to left shift, false to right shift</param>
-		public void circularShift(int bits, bool leftShift)
+		public void CircularShift(int bits, bool leftShift)
 		{
 			if (!ValidPositionWhen(8))
 				throw new IOException("Cannot read in an offset bigger than the length of the stream");
@@ -1000,7 +1003,7 @@ namespace BitStreams
 		/// <summary>
 		///     Apply an and operator on the current stream and bit position and advances one bit position
 		/// </summary>
-		/// <param name="bit">Bit value to apply and</param>
+		/// <param name="x">Bit value to apply and</param>
 		public void BitAnd(Bit x)
 		{
 			if (!ValidPosition)
@@ -1014,7 +1017,7 @@ namespace BitStreams
 		/// <summary>
 		///     Apply an or operator on the current stream and bit position and advances one bit position
 		/// </summary>
-		/// <param name="bit">Bit value to apply or</param>
+		/// <param name="x">Bit value to apply or</param>
 		public void BitOr(Bit x)
 		{
 			if (!ValidPosition)
@@ -1028,7 +1031,7 @@ namespace BitStreams
 		/// <summary>
 		///     Apply a xor operator on the current stream and bit position and advances one bit position
 		/// </summary>
-		/// <param name="bit">Bit value to apply xor</param>
+		/// <param name="x">Bit value to apply xor</param>
 		public void BitXor(Bit x)
 		{
 			if (!ValidPosition)
