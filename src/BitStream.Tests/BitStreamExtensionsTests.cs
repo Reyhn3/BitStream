@@ -52,5 +52,23 @@ namespace BitStream.Tests
 
 			results.Select(b => b.AsBool()).ShouldBe(TestData.Data5Msb.Concat(TestData.Data18Msb));
 		}
+
+		[Test]
+		public void SetBit_shall_set_the_bit_at_the_specified_position()
+		{
+			var buffer = new byte[1];
+			var stream = new BitStreams.BitStream(buffer);
+			stream.WriteBit(1);
+			stream.WriteBit(0);
+			stream.WriteBit(1);
+
+
+			// Set bit 2 to 1.
+			stream.SetBit(0, 1, 1);
+
+
+			var result = stream.ReadBit(0, 1);
+			result.AsInt().ShouldBe(1);
+		}
 	}
 }

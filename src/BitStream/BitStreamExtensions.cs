@@ -28,5 +28,14 @@ namespace BitStreams
 			stream.Seek(offset, bit);
 			return stream.ReadBit();
 		}
+
+		public static void SetBit(this BitStream stream, long offset, int bit, Bit value)
+		{
+			if (stream == null)
+				throw new ArgumentNullException(nameof(stream));
+
+			stream.Seek(offset, bit);
+			stream.WriteBit(value);
+		}
 	}
 }
