@@ -187,8 +187,8 @@ namespace BitStreams
 		/// <summary>
 		///     Seek through the stream selecting the offset and bit using <see cref="SeekOrigin.Begin" />
 		/// </summary>
-		/// <param name="offset">offset on the stream</param>
-		/// <param name="bit">bit position</param>
+		/// <param name="offset">Byte offset on the stream.</param>
+		/// <param name="bit">Bit position.</param>
 		public void Seek(long offset, int bit)
 		{
 			if (offset > Length)
