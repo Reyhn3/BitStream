@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using BitStreams;
 using NUnit.Framework;
 using Shouldly;
@@ -8,18 +10,15 @@ namespace BitStream.Tests
 {
 	public class BitStreamExtensionsTests
 	{
-		private const byte Data5 = 5; // 00000101 (MSB), 10100000 (LSB)
-		private const byte Data18 = 0x12; // 0010010 (MSB), 0100100 (LSB)
-
-		[TestCase(true, "0000010100010010")]
-		[TestCase(false, "1010000001001000")]
+		[TestCase(true, TestData.Data5MsbString + TestData.Data18MsbString)]
+		[TestCase(false, TestData.Data5LsbString + TestData.Data18LsbString)]
 		public void AsBitString_shall_return_a_string_representation_of_the_bits(bool msb, string expected)
 		{
 			var buffer = new byte[2];
 			var stream = new BitStreams.BitStream(buffer, msb);
 
-			stream.WriteByte(Data5);
-			stream.WriteByte(Data18);
+			stream.WriteByte(TestData.Data5);
+			stream.WriteByte(TestData.Data18);
 
 			var result = stream.AsBitString();
 
@@ -33,14 +32,25 @@ namespace BitStream.Tests
 			var buffer = new byte[2];
 			var stream = new BitStreams.BitStream(buffer, true);
 
-			stream.WriteByte(Data5);
-			stream.WriteByte(Data18);
+			stream.WriteByte(TestData.Data5);
+			stream.WriteByte(TestData.Data18);
 
-			// Read the second byte, third bit.
-			var result = stream.ReadBit(1, 2);
+			var results = new List<Bit>(buffer.Length * 8);
 
-//TODO: This should work.
-			result.AsInt().ShouldBe(1);
+			for (var bytePos = 0; bytePos < buffer.Length; bytePos++)
+			{
+				for (var bitPos = 0; bitPos < 8; bitPos++)
+				{
+					var result = stream.ReadBit(bytePos, bitPos);
+					results.Add(result);
+
+					Console.WriteLine("[Byte {0}, Bit {1}]\t{2}", bytePos, bitPos, result);
+				}
+
+				Console.WriteLine();
+			}
+
+			results.Select(b => b.AsBool()).ShouldBe(TestData.Data5Msb.Concat(TestData.Data18Msb));
 		}
 	}
 }
