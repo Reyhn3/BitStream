@@ -10,7 +10,7 @@ namespace BitStream.Tests
 {
 	public class BitStreamExtensionsTests
 	{
-		[TestCase(true, TestData.Data5MsbString + TestData.Data18MsbString)]
+		[TestCase(true, TestData.Data18LsbString + TestData.Data5LsbString)]
 		[TestCase(false, TestData.Data5LsbString + TestData.Data18LsbString)]
 		public void AsBitString_shall_return_a_string_representation_of_the_bits(bool msb, string expected)
 		{
@@ -54,6 +54,31 @@ namespace BitStream.Tests
 		}
 
 		[Test]
+		public void ReadBit_shall_read_the_bit_at_the_specified_bit_position()
+		{
+			var buffer = new byte[2];
+			var stream = new BitStreams.BitStream(buffer, true);
+
+			stream.WriteByte(TestData.Data5);
+			stream.WriteByte(TestData.Data18);
+
+			var results = new List<Bit>(buffer.Length * 8);
+
+			for (var bitPos = 0; bitPos < 8 * buffer.Length; bitPos++)
+			{
+				var result = stream.ReadBit(bitPos);
+				results.Add(result);
+
+				if (bitPos > 0 && bitPos % 8 == 0)
+					Console.WriteLine();
+
+				Console.WriteLine("[Byte {0}, Bit {1,2}]\t{2}", bitPos / 8, bitPos, result);
+			}
+
+			results.Select(b => b.AsBool()).ShouldBe(TestData.Data5Msb.Concat(TestData.Data18Msb));
+		}
+
+		[Test]
 		public void SetBit_shall_set_the_bit_at_the_specified_position()
 		{
 			var buffer = new byte[1];
@@ -64,11 +89,31 @@ namespace BitStream.Tests
 
 
 			// Set bit 2 to 1.
-			stream.SetBit(0, 1, 1);
+			stream.SetBit(0, 1, true);
 
 
-			var result = stream.ReadBit(0, 1);
-			result.AsInt().ShouldBe(1);
+			var result = stream.AsBitString();
+			Console.WriteLine(result);
+			result.ShouldBe("00000111");
+		}
+
+		[Test]
+		public void SetBit_shall_set_the_bit_at_the_specified_bit_position()
+		{
+			var buffer = new byte[2];
+			var stream = new BitStreams.BitStream(buffer);
+
+			stream.WriteByte(TestData.Data5);
+			stream.WriteByte(TestData.Data18);
+
+
+			// Set bit 15 to 1.
+			stream.SetBit(15, true);
+
+
+			var result = stream.AsBitString();
+			Console.WriteLine(result);
+			result.ShouldBe(TestData.Data5MsbString + "10010010");
 		}
 	}
 }
